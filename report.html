@@ -301,7 +301,7 @@ div#notebook {
 <span class="n">n_students</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="p">)</span>
 
 <span class="c"># TODO: Calculate number of features</span>
-<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span> <span class="c"># Minus the target column</span>
 
 <span class="c"># TODO: Calculate passing students</span>
 <span class="n">n_passed</span> <span class="o">=</span> <span class="mi">0</span>
@@ -395,7 +395,7 @@ Name: passed, dtype: object
 No missing values for passing status
 
 Total number of students: 395
-Number of features: 31
+Number of features: 30
 Number of students who passed: 265
 Number of students who failed: 130
 Graduation rate of the class: 67.09%
@@ -590,7 +590,9 @@ Feature values:
 <span class="c"># TODO: Shuffle and split the dataset into the number of training and testing points above</span>
 <span class="c"># Ref: http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html</span>
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.24</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">82</span><span class="p">)</span>
+    <span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.24</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">82</span><span class="p">)</span>   <span class="c"># This dataset is unbalanced (more passing students than failing</span>
+                                                     <span class="c"># students); however, is not too heavily skewed, in which case</span>
+                                                     <span class="c"># is better to use the parameter &#39;stratify=y_all&#39;</span>
 
 <span class="c"># Show the results of the split</span>
 <span class="k">print</span> <span class="s">&quot;Training set has {} samples.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -658,7 +660,7 @@ Testing set has 95 samples.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong>The dataset now contains all numerical variables, and categorical variables have been turned into as many dummy variables as the number of categories each of these variables had.  So now we have 48 variables, 300 data points in the training set and 95 data points in the testing set. Taking into account these characteristics, my model choices are:</p>
+<p><strong>Answer: </strong>The dataset now contains all numerical variables, and categorical variables have been turned into as many dummy variables as the number of categories each of these variables had.  So now we have 48 variables, 300 data points in the training set and 95 data points in the testing set. The data set is relatively small and somewhat unbalanced. Taking into account these characteristics, my model choices are:</p>
 <p><strong><em>Support Vector Machines</em></strong>:</p>
 <p><em>Ref:</em><br>
 <a href="www-labs.iro.umontreal.ca/~pift6080/H09/documents/papers/svm_tutorial.ppt">Support Vector Machines &amp; Its Applications - Mingyue Tan PPT</a></p>
@@ -1045,7 +1047,7 @@ F1 score for test set: 0.8514.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong> The ensamble method looks like it is overfitting; training F<sub>1</sub> scores are very high, but test F<sub>1</sub> scores are consistently lower than for the other two methods. The best F<sub>1</sub> scores for the testing set are for 200 training samples in SVM and 300 training samples in KNN. Both have a F<sub>1</sub> score of 0.8514.</p>
-<p>Since training time plus prediction time in KNN is lower than in SVM (0.003 &lt; 0.005), I am going to choose KNN with the 300 training samples partition.</p>
+<p>Since training time plus prediction time in KNN is lower than in SVM (0.003 &lt; 0.005), I am going to choose KNN with the 300 training samples partition. Since KNN performance is influenced by units, <a href="http://sebastianraschka.com/Articles/2014_about_feature_scaling.html">scaling preprocessing</a> may be necessary; however, if scaling is not really necessary and it is done, noise may be magnified. For this case scaling is not performed.</p>
 
 </div>
 </div>
